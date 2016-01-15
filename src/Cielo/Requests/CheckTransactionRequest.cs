@@ -6,16 +6,16 @@ namespace Cielo.Requests
 {
     public class CheckTransactionRequest : CieloRequest
     {
-        private readonly string _tid;
-
         public CheckTransactionRequest(string tid, IConfiguration configuration = null)
             : base(configuration)
         {
-            _tid = tid;
+            Tid = tid;
             UniqueKey = Guid.NewGuid();
         }
 
         public Guid UniqueKey { get; set; }
+
+        public string Tid { get; private set; }
 
         public override string ToXml(bool indent)
         {
@@ -24,7 +24,7 @@ namespace Cielo.Requests
 
             xml.requisicao_consulta(new {id = UniqueKey, versao = CieloVersion.Version}, Xml.Fragment(req =>
             {
-                req.tid(_tid);
+                req.tid(Tid);
                 Affiliate.ToXml(req, Configuration);
             }));
 

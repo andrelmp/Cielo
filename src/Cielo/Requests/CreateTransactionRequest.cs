@@ -9,11 +9,6 @@ namespace Cielo.Requests
 {
     public class CreateTransactionRequest : CieloRequest
     {
-        private readonly CreditCardData _creditCardData;
-        private readonly CreateTransactionOptions _options;
-        private readonly Order _order;
-        private readonly PaymentMethod _paymentMethod;
-
         public CreateTransactionRequest(
             Order order,
             PaymentMethod paymentMethod,
@@ -21,13 +16,21 @@ namespace Cielo.Requests
             CreditCardData creditCardData = null,
             IConfiguration configuration = null) : base(configuration)
         {
-            _paymentMethod = paymentMethod;
-            _options = options;
-            _creditCardData = creditCardData;
-            _order = order;
+            PaymentMethod = paymentMethod;
+            Options = options;
+            CreditCardData = creditCardData;
+            Order = order;
 
             UniqueKey = Guid.NewGuid();
         }
+
+        public Order Order { get; private set; }
+
+        public CreditCardData CreditCardData { get; private set; }
+
+        public PaymentMethod PaymentMethod { get; private set; }
+
+        public CreateTransactionOptions Options { get; private set; }
 
         public Guid UniqueKey { get; set; }
 
@@ -39,19 +42,19 @@ namespace Cielo.Requests
             {
                 Affiliate.ToXml(req, Configuration);
 
-                if (_creditCardData != null)
+                if (CreditCardData != null)
                 {
-                    _creditCardData.ToXml(req);
+                    CreditCardData.ToXml(req);
                 }
 
-                _order.ToXml(req, Configuration);
+                Order.ToXml(req, Configuration);
 
-                _paymentMethod.ToXml(req);
+                PaymentMethod.ToXml(req);
 
                 req.url_retorno(Configuration.ReturnUrl);
-                req.autorizar((int) _options.AuthorizationType);
-                req.capturar(_options.Capture.ToString(CultureInfo.InvariantCulture).ToLower());
-                req.gerar_token(_options.GenerateToken.ToString(CultureInfo.InvariantCulture).ToLower());
+                req.autorizar((int) Options.AuthorizationType);
+                req.capturar(Options.Capture.ToString(CultureInfo.InvariantCulture).ToLower());
+                req.gerar_token(Options.GenerateToken.ToString(CultureInfo.InvariantCulture).ToLower());
             }));
 
             return xml.ToString(indent);
