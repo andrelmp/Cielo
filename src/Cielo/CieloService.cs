@@ -77,6 +77,21 @@ namespace Cielo
             }
         }
 
+        public CaptureTransactionResponse CaptureTransaction(CaptureTransactionRequest request)
+        {
+            var responseContent = string.Empty;
+            try
+            {
+                responseContent = Execute(request);
+                CreateExceptionIfError(responseContent);
+                return new CaptureTransactionResponse(responseContent);
+            }
+            catch (Exception ex)
+            {
+                throw new ResponseException(responseContent, ex);
+            }
+        }
+
         private static void CreateExceptionIfError(string responseContent)
         {
             if (responseContent.Contains("<erro xmlns=\"http://ecommerce.cbmp.com.br\">"))

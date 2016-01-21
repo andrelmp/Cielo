@@ -58,7 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaptureTransactionRequestTests.cs" />
     <Compile Include="CheckCancelTransactionRequestTests.cs" />
+    <Compile Include="CaptureTransactionResponseTests.cs" />
     <Compile Include="CheckTransactionResponseTests.cs" />
     <Compile Include="CheckTransactionRequestTests.cs" />
     <Compile Include="CieloServiceTests.cs" />
